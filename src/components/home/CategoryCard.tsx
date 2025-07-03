@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Code, Database, Palette, Briefcase, Megaphone, Camera } from 'lucide-react';
+import { Code, Database, Palette, Briefcase, Megaphone, Camera, User, DollarSign, Heart } from 'lucide-react';
 
 const iconMap = {
   code: Code,
@@ -8,6 +8,9 @@ const iconMap = {
   briefcase: Briefcase,
   megaphone: Megaphone,
   camera: Camera,
+  user: User,
+  'dollar-sign': DollarSign,
+  heart: Heart,
 };
 
 interface Category {
