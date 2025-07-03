@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Play, Pause, SkipBack, SkipForward, Volume2, Maximize, BookOpen, Download, MessageCircle, CheckCircle } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  Maximize,
+  BookOpen,
+  Download,
+  MessageCircle,
+  CheckCircle,
+} from 'lucide-react';
 
 export function CoursePlayer() {
   const { id } = useParams();
@@ -16,7 +27,7 @@ export function CoursePlayer() {
       id: '3',
       title: 'Introduction to HTML',
       duration: '12:34',
-      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
+      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
     },
     curriculum: [
       {
@@ -24,40 +35,46 @@ export function CoursePlayer() {
         lessons: [
           { id: '1', title: 'Course Introduction', duration: '5:23', completed: true },
           { id: '2', title: 'Development Environment Setup', duration: '8:45', completed: true },
-          { id: '3', title: 'Introduction to HTML', duration: '12:34', completed: false, current: true },
-          { id: '4', title: 'HTML Elements and Tags', duration: '15:22', completed: false }
-        ]
+          {
+            id: '3',
+            title: 'Introduction to HTML',
+            duration: '12:34',
+            completed: false,
+            current: true,
+          },
+          { id: '4', title: 'HTML Elements and Tags', duration: '15:22', completed: false },
+        ],
       },
       {
         section: 'HTML Fundamentals',
         lessons: [
           { id: '5', title: 'Document Structure', duration: '10:15', completed: false },
           { id: '6', title: 'Forms and Input Types', duration: '18:45', completed: false },
-          { id: '7', title: 'Semantic HTML', duration: '14:30', completed: false }
-        ]
+          { id: '7', title: 'Semantic HTML', duration: '14:30', completed: false },
+        ],
       },
       {
         section: 'CSS Styling',
         lessons: [
           { id: '8', title: 'CSS Selectors', duration: '16:20', completed: false },
           { id: '9', title: 'Box Model', duration: '13:55', completed: false },
-          { id: '10', title: 'Flexbox Layout', duration: '22:15', completed: false }
-        ]
-      }
+          { id: '10', title: 'Flexbox Layout', duration: '22:15', completed: false },
+        ],
+      },
     ],
     resources: [
       { name: 'HTML Cheat Sheet', type: 'PDF', size: '2.3 MB' },
       { name: 'CSS Reference Guide', type: 'PDF', size: '1.8 MB' },
-      { name: 'Project Source Code', type: 'ZIP', size: '5.2 MB' }
+      { name: 'Project Source Code', type: 'ZIP', size: '5.2 MB' },
     ],
     notes: [
       { id: '1', timestamp: '2:15', content: 'Remember to always use semantic HTML elements' },
-      { id: '2', timestamp: '8:30', content: 'DOCTYPE declaration is important for HTML5' }
-    ]
+      { id: '2', timestamp: '8:30', content: 'DOCTYPE declaration is important for HTML5' },
+    ],
   };
 
   const handleLessonComplete = (lessonId: string) => {
-    setCompletedLessons(prev => new Set([...prev, lessonId]));
+    setCompletedLessons((prev) => new Set([...prev, lessonId]));
   };
 
   return (
@@ -108,8 +125,12 @@ export function CoursePlayer() {
         <div className="bg-white border-b border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{course.currentLesson.title}</h1>
-              <p className="text-gray-600">{course.title} • {course.instructor}</p>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                {course.currentLesson.title}
+              </h1>
+              <p className="text-gray-600">
+                {course.title} • {course.instructor}
+              </p>
             </div>
             <button
               onClick={() => handleLessonComplete(course.currentLesson.id)}
@@ -157,18 +178,20 @@ export function CoursePlayer() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Lesson Overview</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  In this lesson, you'll learn the fundamentals of HTML (HyperText Markup Language), 
-                  the building block of all web pages. We'll cover the basic structure of HTML documents, 
-                  common elements, and best practices for writing semantic HTML.
+                  In this lesson, you'll learn the fundamentals of HTML (HyperText Markup Language),
+                  the building block of all web pages. We'll cover the basic structure of HTML
+                  documents, common elements, and best practices for writing semantic HTML.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="text-md font-semibold text-gray-900 mb-3">What you'll learn:</h4>
                 <ul className="space-y-2">
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">HTML document structure and DOCTYPE declaration</span>
+                    <span className="text-gray-700">
+                      HTML document structure and DOCTYPE declaration
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -176,7 +199,9 @@ export function CoursePlayer() {
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Semantic HTML and accessibility considerations</span>
+                    <span className="text-gray-700">
+                      Semantic HTML and accessibility considerations
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -192,14 +217,19 @@ export function CoursePlayer() {
               <h3 className="text-lg font-semibold text-gray-900">Lesson Resources</h3>
               <div className="space-y-3">
                 {course.resources.map((resource, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                  >
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
                         <BookOpen className="w-5 h-5 text-primary-600" />
                       </div>
                       <div>
                         <h4 className="font-medium text-gray-900">{resource.name}</h4>
-                        <p className="text-sm text-gray-500">{resource.type} • {resource.size}</p>
+                        <p className="text-sm text-gray-500">
+                          {resource.type} • {resource.size}
+                        </p>
                       </div>
                     </div>
                     <button className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
@@ -220,14 +250,15 @@ export function CoursePlayer() {
                   Add Note
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 {course.notes.map((note) => (
-                  <div key={note.id} className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div
+                    key={note.id}
+                    className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg"
+                  >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-yellow-800">
-                        {note.timestamp}
-                      </span>
+                      <span className="text-sm font-medium text-yellow-800">{note.timestamp}</span>
                       <button className="text-yellow-600 hover:text-yellow-800">
                         <MessageCircle className="w-4 h-4" />
                       </button>
@@ -240,7 +271,9 @@ export function CoursePlayer() {
               {course.notes.length === 0 && (
                 <div className="text-center py-12">
                   <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No notes yet. Add your first note while watching the video!</p>
+                  <p className="text-gray-500">
+                    No notes yet. Add your first note while watching the video!
+                  </p>
                 </div>
               )}
             </div>
@@ -249,7 +282,7 @@ export function CoursePlayer() {
           {activeTab === 'discussions' && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-gray-900">Discussions & Q&A</h3>
-              
+
               <div className="text-center py-12 bg-gray-50 rounded-lg">
                 <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h4 className="text-lg font-medium text-gray-900 mb-2">Join the Discussion</h4>
@@ -270,7 +303,8 @@ export function CoursePlayer() {
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Course Content</h2>
           <p className="text-sm text-gray-600">
-            {course.curriculum.reduce((total, section) => total + section.lessons.length, 0)} lessons
+            {course.curriculum.reduce((total, section) => total + section.lessons.length, 0)}{' '}
+            lessons
           </p>
         </div>
 
@@ -279,11 +313,9 @@ export function CoursePlayer() {
             <div key={sectionIndex} className="border-b border-gray-200">
               <div className="p-4 bg-gray-50">
                 <h3 className="font-medium text-gray-900">{section.section}</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {section.lessons.length} lessons
-                </p>
+                <p className="text-sm text-gray-500 mt-1">{section.lessons.length} lessons</p>
               </div>
-              
+
               <div className="divide-y divide-gray-100">
                 {section.lessons.map((lesson) => (
                   <div
@@ -294,13 +326,15 @@ export function CoursePlayer() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                          lesson.completed 
-                            ? 'bg-green-500 text-white' 
-                            : lesson.current
-                            ? 'bg-primary-600 text-white'
-                            : 'bg-gray-200'
-                        }`}>
+                        <div
+                          className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                            lesson.completed
+                              ? 'bg-green-500 text-white'
+                              : lesson.current
+                                ? 'bg-primary-600 text-white'
+                                : 'bg-gray-200'
+                          }`}
+                        >
                           {lesson.completed ? (
                             <CheckCircle className="w-4 h-4" />
                           ) : lesson.current ? (
@@ -310,9 +344,11 @@ export function CoursePlayer() {
                           )}
                         </div>
                         <div>
-                          <h4 className={`text-sm font-medium ${
-                            lesson.current ? 'text-primary-900' : 'text-gray-900'
-                          }`}>
+                          <h4
+                            className={`text-sm font-medium ${
+                              lesson.current ? 'text-primary-900' : 'text-gray-900'
+                            }`}
+                          >
                             {lesson.title}
                           </h4>
                           <p className="text-xs text-gray-500">{lesson.duration}</p>

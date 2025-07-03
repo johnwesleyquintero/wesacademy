@@ -1,4 +1,3 @@
-import React from 'react';
 import { Users, BookOpen, Award, Globe } from 'lucide-react';
 
 export function StatsSection() {
@@ -7,26 +6,26 @@ export function StatsSection() {
       icon: Users,
       value: '50K+',
       label: 'Active Students',
-      description: 'Learning with us globally'
+      description: 'Learning with us globally',
     },
     {
       icon: BookOpen,
       value: '1,200+',
       label: 'Course Available',
-      description: 'Across various subjects'
+      description: 'Across various subjects',
     },
     {
       icon: Award,
       value: '95%',
       label: 'Success Rate',
-      description: 'Course completion rate'
+      description: 'Course completion rate',
     },
     {
       icon: Globe,
       value: '40+',
       label: 'Countries',
-      description: 'Students from worldwide'
-    }
+      description: 'Students from worldwide',
+    },
   ];
 
   return (

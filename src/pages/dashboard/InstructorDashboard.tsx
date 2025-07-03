@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Plus, BookOpen, Users, DollarSign, TrendingUp, BarChart3, Eye, Edit, Trash2 } from 'lucide-react';
+import {
+  Plus,
+  BookOpen,
+  Users,
+  DollarSign,
+  TrendingUp,
+  BarChart3,
+  Eye,
+  Edit,
+  Trash2,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function InstructorDashboard() {
@@ -14,7 +24,8 @@ export function InstructorDashboard() {
       revenue: 137780,
       rating: 4.8,
       reviews: 12543,
-      image: 'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=300'
+      image:
+        'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=300',
     },
     {
       id: '2',
@@ -24,7 +35,8 @@ export function InstructorDashboard() {
       revenue: 86130,
       rating: 4.9,
       reviews: 5432,
-      image: 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=300'
+      image:
+        'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=300',
     },
     {
       id: '3',
@@ -34,22 +46,57 @@ export function InstructorDashboard() {
       revenue: 0,
       rating: 0,
       reviews: 0,
-      image: 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300'
-    }
+      image:
+        'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
   ];
 
   const stats = [
-    { label: 'Total Students', value: '23,250', icon: Users, color: 'text-blue-600', change: '+12%' },
-    { label: 'Total Revenue', value: '$223,910', icon: DollarSign, color: 'text-green-600', change: '+8%' },
+    {
+      label: 'Total Students',
+      value: '23,250',
+      icon: Users,
+      color: 'text-blue-600',
+      change: '+12%',
+    },
+    {
+      label: 'Total Revenue',
+      value: '$223,910',
+      icon: DollarSign,
+      color: 'text-green-600',
+      change: '+8%',
+    },
     { label: 'Active Courses', value: '2', icon: BookOpen, color: 'text-purple-600', change: '0%' },
-    { label: 'Avg. Rating', value: '4.85', icon: TrendingUp, color: 'text-yellow-600', change: '+0.1' }
+    {
+      label: 'Avg. Rating',
+      value: '4.85',
+      icon: TrendingUp,
+      color: 'text-yellow-600',
+      change: '+0.1',
+    },
   ];
 
   const recentActivity = [
-    { type: 'enrollment', message: 'New student enrolled in Web Development Bootcamp', time: '2 hours ago' },
-    { type: 'review', message: 'New 5-star review on React Development course', time: '4 hours ago' },
-    { type: 'question', message: 'Student asked a question in JavaScript module', time: '6 hours ago' },
-    { type: 'completion', message: '15 students completed Web Development Bootcamp', time: '1 day ago' }
+    {
+      type: 'enrollment',
+      message: 'New student enrolled in Web Development Bootcamp',
+      time: '2 hours ago',
+    },
+    {
+      type: 'review',
+      message: 'New 5-star review on React Development course',
+      time: '4 hours ago',
+    },
+    {
+      type: 'question',
+      message: 'Student asked a question in JavaScript module',
+      time: '6 hours ago',
+    },
+    {
+      type: 'completion',
+      message: '15 students completed Web Development Bootcamp',
+      time: '1 day ago',
+    },
   ];
 
   return (
@@ -78,7 +125,9 @@ export function InstructorDashboard() {
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.label}</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                  <p className={`text-sm mt-1 ${stat.change.startsWith('+') ? 'text-green-600' : 'text-gray-500'}`}>
+                  <p
+                    className={`text-sm mt-1 ${stat.change.startsWith('+') ? 'text-green-600' : 'text-gray-500'}`}
+                  >
                     {stat.change} from last month
                   </p>
                 </div>
@@ -118,7 +167,10 @@ export function InstructorDashboard() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-6">Recent Activity</h3>
                   <div className="space-y-4">
                     {recentActivity.map((activity, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg"
+                      >
                         <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm text-gray-900">{activity.message}</p>
@@ -131,38 +183,53 @@ export function InstructorDashboard() {
 
                 {/* Top Performing Courses */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-6">Top Performing Courses</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-6">
+                    Top Performing Courses
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {courses.filter(course => course.status === 'Published').map((course) => (
-                      <div key={course.id} className="border border-gray-200 rounded-lg overflow-hidden">
-                        <img
-                          src={course.image}
-                          alt={course.title}
-                          className="w-full h-32 object-cover"
-                        />
-                        <div className="p-4">
-                          <h4 className="text-lg font-semibold text-gray-900 mb-2">{course.title}</h4>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="text-gray-500">Students:</span>
-                              <span className="ml-1 font-medium">{course.students.toLocaleString()}</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-500">Revenue:</span>
-                              <span className="ml-1 font-medium">${course.revenue.toLocaleString()}</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-500">Rating:</span>
-                              <span className="ml-1 font-medium">{course.rating} ⭐</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-500">Reviews:</span>
-                              <span className="ml-1 font-medium">{course.reviews.toLocaleString()}</span>
+                    {courses
+                      .filter((course) => course.status === 'Published')
+                      .map((course) => (
+                        <div
+                          key={course.id}
+                          className="border border-gray-200 rounded-lg overflow-hidden"
+                        >
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-32 object-cover"
+                          />
+                          <div className="p-4">
+                            <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                              {course.title}
+                            </h4>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <span className="text-gray-500">Students:</span>
+                                <span className="ml-1 font-medium">
+                                  {course.students.toLocaleString()}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Revenue:</span>
+                                <span className="ml-1 font-medium">
+                                  ${course.revenue.toLocaleString()}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Rating:</span>
+                                <span className="ml-1 font-medium">{course.rating} ⭐</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Reviews:</span>
+                                <span className="ml-1 font-medium">
+                                  {course.reviews.toLocaleString()}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </div>
               </div>
@@ -185,12 +252,24 @@ export function InstructorDashboard() {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Course
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Students
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Revenue
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Rating
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -204,16 +283,20 @@ export function InstructorDashboard() {
                                 className="w-10 h-10 rounded object-cover mr-4"
                               />
                               <div>
-                                <div className="text-sm font-medium text-gray-900">{course.title}</div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {course.title}
+                                </div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              course.status === 'Published' 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'bg-yellow-100 text-yellow-800'
-                            }`}>
+                            <span
+                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                course.status === 'Published'
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-yellow-100 text-yellow-800'
+                              }`}
+                            >
                               {course.status}
                             </span>
                           </td>
@@ -250,7 +333,7 @@ export function InstructorDashboard() {
             {activeTab === 'analytics' && (
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-900">Analytics & Insights</h3>
-                
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -261,7 +344,7 @@ export function InstructorDashboard() {
                       Revenue chart would be displayed here
                     </div>
                   </div>
-                  
+
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-lg font-medium text-gray-900">Student Engagement</h4>
@@ -278,10 +361,12 @@ export function InstructorDashboard() {
             {activeTab === 'students' && (
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-900">Student Management</h3>
-                
+
                 <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
                   <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h4 className="text-lg font-medium text-gray-900 mb-2">Student management features coming soon</h4>
+                  <h4 className="text-lg font-medium text-gray-900 mb-2">
+                    Student management features coming soon
+                  </h4>
                   <p className="text-gray-600">
                     View student progress, answer questions, and manage course discussions.
                   </p>

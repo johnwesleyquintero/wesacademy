@@ -10,13 +10,14 @@ export function CoursesPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const filteredCourses = featuredCourses.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
+  const filteredCourses = featuredCourses.filter((course) => {
+    const matchesSearch =
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.tags?.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+
     const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -26,7 +27,10 @@ export function CoursesPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">All Courses</h1>
-          <p className="text-gray-600">Discover our complete collection of expert-led courses covering the most in-demand skills</p>
+          <p className="text-gray-600">
+            Discover our complete collection of expert-led courses covering the most in-demand
+            skills
+          </p>
         </div>
 
         {/* Quick Category Filters */}
@@ -95,7 +99,9 @@ export function CoursesPage() {
                   <TrendingUp className="w-5 h-5 text-red-600 mr-2" />
                   <span className="text-red-800 font-semibold">Trending Now</span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Most Popular Courses This Month</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                  Most Popular Courses This Month
+                </h3>
                 <p className="text-gray-600">Join thousands learning these in-demand skills</p>
               </div>
               <div className="hidden md:flex space-x-4">
@@ -129,7 +135,7 @@ export function CoursesPage() {
                 />
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -138,7 +144,7 @@ export function CoursesPage() {
                 <Filter className="w-5 h-5 mr-2" />
                 Filters
               </button>
-              
+
               <div className="flex items-center border border-gray-300 rounded-lg">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -171,9 +177,7 @@ export function CoursesPage() {
               <p className="text-gray-600">
                 Showing {filteredCourses.length} of {featuredCourses.length} courses
                 {selectedCategory !== 'all' && (
-                  <span className="ml-2 text-primary-600 font-medium">
-                    in {selectedCategory}
-                  </span>
+                  <span className="ml-2 text-primary-600 font-medium">in {selectedCategory}</span>
                 )}
               </p>
               <select className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
@@ -187,7 +191,7 @@ export function CoursesPage() {
             </div>
 
             {/* Bestseller Badge Info */}
-            {filteredCourses.some(course => course.isBestseller) && (
+            {filteredCourses.some((course) => course.isBestseller) && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
                 <div className="flex items-center">
                   <Star className="w-5 h-5 text-yellow-600 mr-2" />
@@ -198,11 +202,11 @@ export function CoursesPage() {
               </div>
             )}
 
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
-                : 'grid-cols-1'
-            }`}>
+            <div
+              className={`grid gap-6 ${
+                viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+              }`}
+            >
               {filteredCourses.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}

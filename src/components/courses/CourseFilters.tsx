@@ -9,13 +9,13 @@ export function CourseFilters() {
     price: true,
     rating: true,
     duration: true,
-    features: true
+    features: true,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }));
   };
 
@@ -34,13 +34,20 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Category
-          {expandedSections.category ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.category ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.category && (
           <div className="space-y-2">
             {categories.map((category) => (
               <label key={category.name} className="flex items-center">
-                <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
                 <span className="ml-2 text-sm text-gray-700">{category.name}</span>
                 <span className="ml-auto text-xs text-gray-500">({category.courses})</span>
               </label>
@@ -56,13 +63,20 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Level
-          {expandedSections.level ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.level ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.level && (
           <div className="space-y-2">
             {levels.map((level) => (
               <label key={level} className="flex items-center">
-                <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
                 <span className="ml-2 text-sm text-gray-700">{level}</span>
               </label>
             ))}
@@ -77,28 +91,47 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Price
-          {expandedSections.price ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.price ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.price && (
           <div className="space-y-2">
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">Free</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">$0 - $50</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">$50 - $100</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">$100 - $200</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">$200+</span>
             </label>
           </div>
@@ -112,13 +145,20 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Rating
-          {expandedSections.rating ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.rating ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.rating && (
           <div className="space-y-2">
             {ratings.map((rating) => (
               <label key={rating} className="flex items-center">
-                <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
                 <span className="ml-2 text-sm text-gray-700">{rating}+ stars</span>
               </label>
             ))}
@@ -133,24 +173,40 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Duration
-          {expandedSections.duration ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.duration ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.duration && (
           <div className="space-y-2">
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">0-5 hours</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">5-20 hours</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">20-40 hours</span>
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
               <span className="ml-2 text-sm text-gray-700">40+ hours</span>
             </label>
           </div>
@@ -164,13 +220,20 @@ export function CourseFilters() {
           className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
         >
           Features
-          {expandedSections.features ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {expandedSections.features ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </button>
         {expandedSections.features && (
           <div className="space-y-2">
             {features.map((feature) => (
               <label key={feature} className="flex items-center">
-                <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
                 <span className="ml-2 text-sm text-gray-700">{feature}</span>
               </label>
             ))}

@@ -1,97 +1,76 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Star, Clock, Users, Award, Play, Download, Globe, BookOpen, CheckCircle, MessageCircle } from 'lucide-react';
+import {
+  Star,
+  Clock,
+  Users,
+  Play,
+  Globe,
+  CheckCircle,
+  MessageCircle,
+  BookOpen,
+} from 'lucide-react';
+import type { Course } from '../hooks/useCourses';
+import { useCourses } from '../hooks/useCourses';
 
 export function CourseDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('overview');
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { getCourseById } = useCourses();
 
-  // Mock course data
-  const course = {
-    id: '1',
-    title: 'Complete Web Development Bootcamp',
-    subtitle: 'Become a Full-Stack Web Developer with just ONE course. HTML, CSS, Javascript, Node, React, MongoDB, Web3 and DApps',
-    instructor: {
-      name: 'Sarah Johnson',
-      bio: 'Senior Full-Stack Developer with 8+ years of experience',
-      students: 125000,
-      courses: 12,
-      rating: 4.8,
-      image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150'
-    },
-    price: 89.99,
-    originalPrice: 199.99,
-    rating: 4.8,
-    reviews: 12543,
-    students: 15420,
-    duration: '42 hours',
-    lectures: 156,
-    level: 'Beginner',
-    category: 'Web Development',
-    language: 'English',
-    lastUpdated: 'December 2024',
-    image: 'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800',
-    preview: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-    description: 'Welcome to the Complete Web Development Bootcamp, the only course you need to learn to code and become a full-stack web developer. With 150,000+ ratings and a 4.8 average, my Web Development course is one of the HIGHEST RATED courses in the history of Udemy!',
-    whatYouWillLearn: [
-      'Build 16 web development projects for your portfolio, ready to apply for junior developer jobs',
-      'Learn the latest technologies, including Javascript, React, Node and even Web3 development',
-      'After the course you will be able to build ANY website you want',
-      'Build fully-fledged websites and web apps for your startup or business',
-      'Work as a freelance web developer',
-      'Master frontend development with React',
-      'Master backend development with Node'
-    ],
-    curriculum: [
-      {
-        section: 'Front-End Web Development',
-        lectures: 12,
-        duration: '2h 15m',
-        lessons: [
-          { title: 'Introduction to HTML', duration: '12:34', preview: true },
-          { title: 'HTML Elements and Tags', duration: '15:22', preview: false },
-          { title: 'Forms and Input Types', duration: '18:45', preview: false }
-        ]
-      },
-      {
-        section: 'Introduction to CSS',
-        lectures: 15,
-        duration: '3h 45m',
-        lessons: [
-          { title: 'CSS Selectors', duration: '14:20', preview: true },
-          { title: 'Box Model', duration: '16:30', preview: false },
-          { title: 'Flexbox Layout', duration: '22:15', preview: false }
-        ]
-      },
-      {
-        section: 'Javascript Programming',
-        lectures: 25,
-        duration: '6h 30m',
-        lessons: [
-          { title: 'Variables and Data Types', duration: '18:45', preview: false },
-          { title: 'Functions and Scope', duration: '24:12', preview: false },
-          { title: 'DOM Manipulation', duration: '19:33', preview: false }
-        ]
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (!id) {
+        setError('Course ID is missing.');
+        setLoading(false);
+        return;
       }
-    ],
-    requirements: [
-      'No programming experience needed - I\'ll teach you everything you need to know',
-      'A computer with access to the internet',
-      'No paid software required - I\'ll teach you how to use free text editors'
-    ],
-    features: [
-      'Downloadable resources',
-      'Full lifetime access',
-      'Access on mobile and TV',
-      'Certificate of completion'
-    ]
-  };
+      try {
+        setLoading(true);
+        const fetchedCourse = await getCourseById(id);
+        setCourse(fetchedCourse);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load course details.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+  }, [id, getCourseById]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-gray-600">Loading course details...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-red-600">Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-gray-600">Course not found.</p>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
     { id: 'curriculum', label: 'Curriculum' },
     { id: 'instructor', label: 'Instructor' },
-    { id: 'reviews', label: 'Reviews' }
+    { id: 'reviews', label: 'Reviews' },
   ];
 
   return (
@@ -103,29 +82,31 @@ export function CourseDetailPage() {
             <div className="lg:col-span-2 space-y-6">
               <div className="space-y-2">
                 <div className="text-sm text-gray-300">
-                  <span className="bg-accent-600 text-white px-2 py-1 rounded text-xs">BESTSELLER</span>
+                  <span className="bg-accent-600 text-white px-2 py-1 rounded text-xs">
+                    BESTSELLER
+                  </span>
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-                  {course.title}
-                </h1>
-                <p className="text-xl text-gray-300">
-                  {course.subtitle}
-                </p>
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight">{course.title}</h1>
+                <p className="text-xl text-gray-300">{course.subtitle}</p>
               </div>
 
               <div className="flex flex-wrap items-center gap-6 text-sm">
                 <div className="flex items-center">
                   <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                  <span className="text-yellow-400 font-medium">{course.rating}</span>
-                  <span className="text-gray-300 ml-1">({course.reviews.toLocaleString()} reviews)</span>
+                  <span className="text-yellow-400 font-medium">
+                    {course.rating?.toFixed(1) || 'N/A'}
+                  </span>
+                  <span className="text-gray-300 ml-1">
+                    ({course.review_count?.toLocaleString() || 0} reviews)
+                  </span>
                 </div>
                 <div className="flex items-center text-gray-300">
                   <Users className="w-4 h-4 mr-1" />
-                  {course.students.toLocaleString()} students
+                  {course.student_count?.toLocaleString() || 0} students
                 </div>
                 <div className="flex items-center text-gray-300">
                   <Clock className="w-4 h-4 mr-1" />
-                  {course.duration}
+                  {course.duration || 'N/A'}
                 </div>
                 <div className="flex items-center text-gray-300">
                   <Globe className="w-4 h-4 mr-1" />
@@ -136,13 +117,15 @@ export function CourseDetailPage() {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center">
                   <img
-                    src={course.instructor.image}
-                    alt={course.instructor.name}
+                    src={course.instructor_avatar || 'https://via.placeholder.com/150'}
+                    alt={course.instructor_name || 'Unknown Instructor'}
                     className="w-10 h-10 rounded-full mr-3"
                   />
                   <div>
                     <p className="text-sm">Created by</p>
-                    <p className="font-medium text-primary-400">{course.instructor.name}</p>
+                    <p className="font-medium text-primary-400">
+                      {course.instructor_name || 'Unknown Instructor'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -153,7 +136,7 @@ export function CourseDetailPage() {
               <div className="bg-white rounded-xl shadow-xl p-6 sticky top-24">
                 <div className="relative mb-6">
                   <img
-                    src={course.image}
+                    src={course.image_url || 'https://via.placeholder.com/800x450'}
                     alt={course.title}
                     className="w-full rounded-lg"
                   />
@@ -165,10 +148,19 @@ export function CourseDetailPage() {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <span className="text-3xl font-bold text-gray-900">${course.price}</span>
-                    <span className="text-xl text-gray-500 line-through">${course.originalPrice}</span>
-                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-medium">
-                      55% OFF
-                    </span>
+                    {course.original_price && (
+                      <span className="text-xl text-gray-500 line-through">
+                        ${course.original_price}
+                      </span>
+                    )}
+                    {course.original_price && course.price < course.original_price && (
+                      <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-medium">
+                        {Math.round(
+                          ((course.original_price - course.price) / course.original_price) * 100
+                        )}
+                        % OFF
+                      </span>
+                    )}
                   </div>
 
                   <div className="space-y-3">
@@ -187,7 +179,13 @@ export function CourseDetailPage() {
                   <div className="border-t pt-4 space-y-2">
                     <h4 className="font-semibold text-gray-900">This course includes:</h4>
                     <ul className="space-y-2 text-sm text-gray-600">
-                      {course.features.map((feature, index) => (
+                      {/* Assuming features are part of the course data from Supabase or a mock */}
+                      {/* For now, using a placeholder or mock data if available */}
+                      {[
+                        'Full lifetime access',
+                        'Access on mobile and TV',
+                        'Certificate of completion',
+                      ].map((feature, index) => (
                         <li key={index} className="flex items-center">
                           <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
                           {feature}
@@ -230,31 +228,35 @@ export function CourseDetailPage() {
                 {activeTab === 'overview' && (
                   <div className="space-y-8">
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-4">What you'll learn</h3>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        What you'll learn
+                      </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {course.whatYouWillLearn.map((item, index) => (
+                        {course.whatYouWillLearn?.map((item, index) => (
                           <div key={index} className="flex items-start">
                             <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
                             <span className="text-gray-700">{item}</span>
                           </div>
-                        ))}
+                        )) || <p className="text-gray-600">No learning objectives provided.</p>}
                       </div>
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-4">Course description</h3>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        Course description
+                      </h3>
                       <p className="text-gray-700 leading-relaxed">{course.description}</p>
                     </div>
 
                     <div>
                       <h3 className="text-xl font-semibold text-gray-900 mb-4">Requirements</h3>
                       <ul className="space-y-2">
-                        {course.requirements.map((requirement, index) => (
+                        {course.requirements?.map((requirement, index) => (
                           <li key={index} className="flex items-start">
                             <div className="w-2 h-2 bg-gray-400 rounded-full mr-3 mt-2 flex-shrink-0"></div>
                             <span className="text-gray-700">{requirement}</span>
                           </li>
-                        ))}
+                        )) || <p className="text-gray-600">No requirements listed.</p>}
                       </ul>
                     </div>
                   </div>
@@ -265,12 +267,12 @@ export function CourseDetailPage() {
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-semibold text-gray-900">Course content</h3>
                       <p className="text-sm text-gray-500">
-                        {course.lectures} lectures • {course.duration} total length
+                        {course.lectures || 0} lectures • {course.duration || '0h 0m'} total length
                       </p>
                     </div>
 
                     <div className="space-y-4">
-                      {course.curriculum.map((section, index) => (
+                      {course.curriculum?.map((section, index) => (
                         <div key={index} className="border border-gray-200 rounded-lg">
                           <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                             <div className="flex items-center justify-between">
@@ -282,7 +284,10 @@ export function CourseDetailPage() {
                           </div>
                           <div className="divide-y divide-gray-200">
                             {section.lessons.map((lesson, lessonIndex) => (
-                              <div key={lessonIndex} className="px-4 py-3 flex items-center justify-between">
+                              <div
+                                key={lessonIndex}
+                                className="px-4 py-3 flex items-center justify-between"
+                              >
                                 <div className="flex items-center">
                                   <Play className="w-4 h-4 text-gray-400 mr-3" />
                                   <span className="text-sm text-gray-700">{lesson.title}</span>
@@ -297,7 +302,7 @@ export function CourseDetailPage() {
                             ))}
                           </div>
                         </div>
-                      ))}
+                      )) || <p className="text-gray-600">No curriculum available.</p>}
                     </div>
                   </div>
                 )}
@@ -306,30 +311,36 @@ export function CourseDetailPage() {
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
                       <img
-                        src={course.instructor.image}
-                        alt={course.instructor.name}
+                        src={course.instructor_avatar || 'https://via.placeholder.com/150'}
+                        alt={course.instructor_name || 'Unknown Instructor'}
                         className="w-24 h-24 rounded-full"
                       />
                       <div>
-                        <h3 className="text-2xl font-semibold text-gray-900">{course.instructor.name}</h3>
-                        <p className="text-gray-600 mb-4">{course.instructor.bio}</p>
-                        
+                        <h3 className="text-2xl font-semibold text-gray-900">
+                          {course.instructor_name || 'Unknown Instructor'}
+                        </h3>
+                        <p className="text-gray-600 mb-4">
+                          {/* Placeholder for instructor bio, as it's not in Course interface */}
+                          Senior Full-Stack Developer with 8+ years of experience
+                        </p>
+
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div className="flex items-center">
                             <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                            <span>{course.instructor.rating} Instructor Rating</span>
+                            <span>{course.rating?.toFixed(1) || 'N/A'} Instructor Rating</span>
                           </div>
                           <div className="flex items-center">
                             <MessageCircle className="w-4 h-4 text-gray-400 mr-1" />
-                            <span>{course.reviews.toLocaleString()} Reviews</span>
+                            <span>{course.review_count?.toLocaleString() || 0} Reviews</span>
                           </div>
                           <div className="flex items-center">
                             <Users className="w-4 h-4 text-gray-400 mr-1" />
-                            <span>{course.instructor.students.toLocaleString()} Students</span>
+                            <span>{course.student_count?.toLocaleString() || 0} Students</span>
                           </div>
                           <div className="flex items-center">
                             <BookOpen className="w-4 h-4 text-gray-400 mr-1" />
-                            <span>{course.instructor.courses} Courses</span>
+                            {/* Placeholder for instructor courses, not in Course interface */}
+                            <span>12 Courses</span>
                           </div>
                         </div>
                       </div>
@@ -341,7 +352,9 @@ export function CourseDetailPage() {
                   <div className="space-y-6">
                     <div className="flex items-center space-x-8">
                       <div className="text-center">
-                        <div className="text-4xl font-bold text-gray-900">{course.rating}</div>
+                        <div className="text-4xl font-bold text-gray-900">
+                          {course.rating?.toFixed(1) || 'N/A'}
+                        </div>
                         <div className="flex items-center justify-center mb-2">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
@@ -355,13 +368,23 @@ export function CourseDetailPage() {
                             <div key={rating} className="flex items-center space-x-3">
                               <span className="text-sm text-gray-600 w-8">{rating}★</span>
                               <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                <div 
+                                <div
                                   className="bg-yellow-400 h-2 rounded-full"
-                                  style={{ width: `${rating === 5 ? 70 : rating === 4 ? 20 : rating === 3 ? 5 : rating === 2 ? 3 : 2}%` }}
+                                  style={{
+                                    width: `${rating === 5 ? 70 : rating === 4 ? 20 : rating === 3 ? 5 : rating === 2 ? 3 : 2}%`,
+                                  }}
                                 ></div>
                               </div>
                               <span className="text-sm text-gray-500 w-12">
-                                {rating === 5 ? '70%' : rating === 4 ? '20%' : rating === 3 ? '5%' : rating === 2 ? '3%' : '2%'}
+                                {rating === 5
+                                  ? '70%'
+                                  : rating === 4
+                                    ? '20%'
+                                    : rating === 3
+                                      ? '5%'
+                                      : rating === 2
+                                        ? '3%'
+                                        : '2%'}
                               </span>
                             </div>
                           ))}
@@ -384,7 +407,9 @@ export function CourseDetailPage() {
           {/* Sidebar - Related Courses */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">More courses by this instructor</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                More courses by this instructor
+              </h3>
               <div className="space-y-4">
                 {/* Mock related courses */}
                 <div className="flex space-x-3">

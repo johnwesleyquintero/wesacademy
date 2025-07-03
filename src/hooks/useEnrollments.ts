@@ -1,48 +1,40 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-import { useAuth } from '../contexts/AuthContext'
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext.hooks';
 
 export interface Enrollment {
-  id: string
-  user_id: string
-  course_id: string
-  enrolled_at: string
-  progress: number
-  completed_at: string | null
-  last_accessed: string | null
+  id: string;
+  user_id: string;
+  course_id: string;
+  enrolled_at: string;
+  progress: number;
+  completed_at: string | null;
+  last_accessed: string | null;
   course?: {
-    id: string
-    title: string
-    image_url: string | null
-    instructor_name?: string
-    duration: string | null
-  }
+    id: string;
+    title: string;
+    image_url: string | null;
+    instructor_name?: string;
+    duration: string | null;
+  };
 }
 
 export function useEnrollments() {
-  const { user } = useAuth()
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { user } = useAuth();
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchEnrollments()
-    } else {
-      setEnrollments([])
-      setLoading(false)
-    }
-  }, [user])
-
-  const fetchEnrollments = async () => {
-    if (!user) return
+  const fetchEnrollments = useCallback(async () => {
+    if (!user) return;
 
     try {
-      setLoading(true)
-      
-      const { data, error } = await supabase
+      setLoading(true);
+
+      const { data, error: fetchError } = await supabase
         .from('enrollments')
-        .select(`
+        .select(
+          `
           *,
           courses(
             id,
@@ -51,30 +43,43 @@ export function useEnrollments() {
             duration,
             profiles!courses_instructor_id_fkey(full_name)
           )
-        `)
+        `
+        )
         .eq('user_id', user.id)
-        .order('enrolled_at', { ascending: false })
+        .order('enrolled_at', { ascending: false });
 
-      if (error) throw error
+      if (fetchError) throw fetchError;
 
-      const processedEnrollments = data?.map(enrollment => ({
-        ...enrollment,
-        course: enrollment.courses ? {
-          ...enrollment.courses,
-          instructor_name: enrollment.courses.profiles?.full_name || 'Unknown Instructor',
-        } : undefined,
-      })) || []
+      const processedEnrollments =
+        data?.map((enrollment) => ({
+          ...enrollment,
+          course: enrollment.courses
+            ? {
+                ...enrollment.courses,
+                instructor_name: enrollment.courses.profiles?.full_name || 'Unknown Instructor',
+              }
+            : undefined,
+        })) || [];
 
-      setEnrollments(processedEnrollments)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch enrollments')
+      setEnrollments(processedEnrollments);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch enrollments');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  }, [user]); // fetchEnrollments depends on 'user'
+
+  useEffect(() => {
+    if (user) {
+      fetchEnrollments();
+    } else {
+      setEnrollments([]);
+      setLoading(false);
+    }
+  }, [user, fetchEnrollments]); // Add fetchEnrollments to dependency array
 
   const enrollInCourse = async (courseId: string) => {
-    if (!user) throw new Error('User must be logged in to enroll')
+    if (!user) throw new Error('User must be logged in to enroll');
 
     try {
       // Check if already enrolled
@@ -83,56 +88,54 @@ export function useEnrollments() {
         .select('id')
         .eq('user_id', user.id)
         .eq('course_id', courseId)
-        .single()
+        .single();
 
       if (existingEnrollment) {
-        throw new Error('Already enrolled in this course')
+        throw new Error('Already enrolled in this course');
       }
 
-      const { error } = await supabase
-        .from('enrollments')
-        .insert({
-          user_id: user.id,
-          course_id: courseId,
-          progress: 0,
-        })
+      const { error: insertError } = await supabase.from('enrollments').insert({
+        user_id: user.id,
+        course_id: courseId,
+        progress: 0,
+      });
 
-      if (error) throw error
+      if (insertError) throw insertError;
 
       // Refresh enrollments
-      await fetchEnrollments()
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to enroll in course')
+      await fetchEnrollments();
+    } catch (err: unknown) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to enroll in course');
     }
-  }
+  };
 
   const updateProgress = async (enrollmentId: string, progress: number) => {
     try {
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from('enrollments')
         .update({
           progress,
           last_accessed: new Date().toISOString(),
           ...(progress >= 100 && { completed_at: new Date().toISOString() }),
         })
-        .eq('id', enrollmentId)
+        .eq('id', enrollmentId);
 
-      if (error) throw error
+      if (updateError) throw updateError;
 
       // Refresh enrollments
-      await fetchEnrollments()
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to update progress')
+      await fetchEnrollments();
+    } catch (err: unknown) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to update progress');
     }
-  }
+  };
 
   const isEnrolled = (courseId: string) => {
-    return enrollments.some(enrollment => enrollment.course_id === courseId)
-  }
+    return enrollments.some((enrollment) => enrollment.course_id === courseId);
+  };
 
   const getEnrollment = (courseId: string) => {
-    return enrollments.find(enrollment => enrollment.course_id === courseId)
-  }
+    return enrollments.find((enrollment) => enrollment.course_id === courseId);
+  };
 
   return {
     enrollments,
@@ -143,5 +146,5 @@ export function useEnrollments() {
     isEnrolled,
     getEnrollment,
     fetchEnrollments,
-  }
+  };
 }

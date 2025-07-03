@@ -16,78 +16,82 @@ export function CreateCoursePage() {
     curriculum: [
       {
         sectionTitle: '',
-        lessons: [
-          { title: '', duration: '', videoFile: null }
-        ]
-      }
-    ]
+        lessons: [{ title: '', duration: '', videoFile: null }],
+      },
+    ],
   });
 
   const steps = [
     { id: 1, title: 'Course Details', description: 'Basic information about your course' },
     { id: 2, title: 'Curriculum', description: 'Structure your course content' },
-    { id: 3, title: 'Pricing', description: 'Set your course price and publish' }
+    { id: 3, title: 'Pricing', description: 'Set your course price and publish' },
   ];
 
   const categories = [
-    'Web Development', 'Data Science', 'Design', 'Business', 
-    'Marketing', 'Photography', 'Programming', 'Mobile Development'
+    'Web Development',
+    'Data Science',
+    'Design',
+    'Business',
+    'Marketing',
+    'Photography',
+    'Programming',
+    'Mobile Development',
   ];
 
   const levels = ['Beginner', 'Intermediate', 'Advanced', 'All Levels'];
 
   const handleInputChange = (field: string, value: any) => {
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const addSection = () => {
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
       curriculum: [
         ...prev.curriculum,
         {
           sectionTitle: '',
-          lessons: [{ title: '', duration: '', videoFile: null }]
-        }
-      ]
+          lessons: [{ title: '', duration: '', videoFile: null }],
+        },
+      ],
     }));
   };
 
   const addLesson = (sectionIndex: number) => {
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
-      curriculum: prev.curriculum.map((section, index) => 
-        index === sectionIndex 
+      curriculum: prev.curriculum.map((section, index) =>
+        index === sectionIndex
           ? {
               ...section,
-              lessons: [...section.lessons, { title: '', duration: '', videoFile: null }]
+              lessons: [...section.lessons, { title: '', duration: '', videoFile: null }],
             }
           : section
-      )
+      ),
     }));
   };
 
   const removeSection = (sectionIndex: number) => {
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
-      curriculum: prev.curriculum.filter((_, index) => index !== sectionIndex)
+      curriculum: prev.curriculum.filter((_, index) => index !== sectionIndex),
     }));
   };
 
   const removeLesson = (sectionIndex: number, lessonIndex: number) => {
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
-      curriculum: prev.curriculum.map((section, index) => 
-        index === sectionIndex 
+      curriculum: prev.curriculum.map((section, index) =>
+        index === sectionIndex
           ? {
               ...section,
-              lessons: section.lessons.filter((_, lIndex) => lIndex !== lessonIndex)
+              lessons: section.lessons.filter((_, lIndex) => lIndex !== lessonIndex),
             }
           : section
-      )
+      ),
     }));
   };
 
@@ -123,27 +127,34 @@ export function CreateCoursePage() {
           <nav aria-label="Progress">
             <ol className="flex items-center">
               {steps.map((step, index) => (
-                <li key={step.id} className={`relative ${
-                  index !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''
-                }`}>
+                <li
+                  key={step.id}
+                  className={`relative ${index !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''}`}
+                >
                   <div className="flex items-center">
-                    <div className={`relative w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentStep >= step.id 
-                        ? 'bg-primary-600 text-white' 
-                        : 'bg-gray-200 text-gray-500'
-                    }`}>
+                    <div
+                      className={`relative w-8 h-8 rounded-full flex items-center justify-center ${
+                        currentStep >= step.id
+                          ? 'bg-primary-600 text-white'
+                          : 'bg-gray-200 text-gray-500'
+                      }`}
+                    >
                       {step.id}
                     </div>
                     {index !== steps.length - 1 && (
-                      <div className={`absolute top-4 left-8 w-full h-0.5 ${
-                        currentStep > step.id ? 'bg-primary-600' : 'bg-gray-200'
-                      }`} />
+                      <div
+                        className={`absolute top-4 left-8 w-full h-0.5 ${
+                          currentStep > step.id ? 'bg-primary-600' : 'bg-gray-200'
+                        }`}
+                      />
                     )}
                   </div>
                   <div className="ml-4">
-                    <p className={`text-sm font-medium ${
-                      currentStep >= step.id ? 'text-primary-600' : 'text-gray-500'
-                    }`}>
+                    <p
+                      className={`text-sm font-medium ${
+                        currentStep >= step.id ? 'text-primary-600' : 'text-gray-500'
+                      }`}
+                    >
                       {step.title}
                     </p>
                     <p className="text-xs text-gray-500">{step.description}</p>
@@ -161,7 +172,7 @@ export function CreateCoursePage() {
             {currentStep === 1 && (
               <div className="p-8 space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6">Course Details</h2>
-                
+
                 <div className="grid grid-cols-1 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -216,15 +227,15 @@ export function CreateCoursePage() {
                       >
                         <option value="">Select a category</option>
                         {categories.map((category) => (
-                          <option key={category} value={category}>{category}</option>
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
                         ))}
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Level
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Level</label>
                       <select
                         required
                         value={courseData.level}
@@ -233,7 +244,9 @@ export function CreateCoursePage() {
                       >
                         <option value="">Select level</option>
                         {levels.map((level) => (
-                          <option key={level} value={level}>{level}</option>
+                          <option key={level} value={level}>
+                            {level}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -245,9 +258,7 @@ export function CreateCoursePage() {
                     </label>
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-400 transition-colors">
                       <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-sm text-gray-600 mb-2">
-                        Click to upload or drag and drop
-                      </p>
+                      <p className="text-sm text-gray-600 mb-2">Click to upload or drag and drop</p>
                       <p className="text-xs text-gray-500">
                         PNG, JPG up to 10MB (Recommended: 1280x720)
                       </p>
@@ -255,7 +266,9 @@ export function CreateCoursePage() {
                         type="file"
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => handleInputChange('thumbnail', e.target.files?.[0] || null)}
+                        onChange={(e) =>
+                          handleInputChange('thumbnail', e.target.files?.[0] || null)
+                        }
                       />
                     </div>
                   </div>
@@ -306,7 +319,10 @@ export function CreateCoursePage() {
 
                       <div className="space-y-3">
                         {section.lessons.map((lesson, lessonIndex) => (
-                          <div key={lessonIndex} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <div
+                            key={lessonIndex}
+                            className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+                          >
                             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                               <input
                                 type="text"
@@ -314,7 +330,8 @@ export function CreateCoursePage() {
                                 value={lesson.title}
                                 onChange={(e) => {
                                   const newCurriculum = [...courseData.curriculum];
-                                  newCurriculum[sectionIndex].lessons[lessonIndex].title = e.target.value;
+                                  newCurriculum[sectionIndex].lessons[lessonIndex].title =
+                                    e.target.value;
                                   handleInputChange('curriculum', newCurriculum);
                                 }}
                                 className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -325,7 +342,8 @@ export function CreateCoursePage() {
                                 value={lesson.duration}
                                 onChange={(e) => {
                                   const newCurriculum = [...courseData.curriculum];
-                                  newCurriculum[sectionIndex].lessons[lessonIndex].duration = e.target.value;
+                                  newCurriculum[sectionIndex].lessons[lessonIndex].duration =
+                                    e.target.value;
                                   handleInputChange('curriculum', newCurriculum);
                                 }}
                                 className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -340,7 +358,7 @@ export function CreateCoursePage() {
                             </button>
                           </div>
                         ))}
-                        
+
                         <button
                           type="button"
                           onClick={() => addLesson(sectionIndex)}
@@ -359,14 +377,16 @@ export function CreateCoursePage() {
             {currentStep === 3 && (
               <div className="p-8 space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6">Pricing & Publish</h2>
-                
+
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Course Price (USD)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        $
+                      </span>
                       <input
                         type="number"
                         step="0.01"
@@ -385,7 +405,8 @@ export function CreateCoursePage() {
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="text-lg font-semibold text-blue-900 mb-2">Ready to Publish?</h3>
                     <p className="text-blue-800 mb-4">
-                      Your course will be reviewed before going live. This typically takes 1-2 business days.
+                      Your course will be reviewed before going live. This typically takes 1-2
+                      business days.
                     </p>
                     <ul className="text-sm text-blue-700 space-y-1">
                       <li>• Students can enroll and start learning immediately</li>
@@ -408,7 +429,7 @@ export function CreateCoursePage() {
                   Previous
                 </button>
               )}
-              
+
               <div className="ml-auto flex space-x-4">
                 <button
                   type="button"

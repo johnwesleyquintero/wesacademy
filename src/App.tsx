@@ -24,53 +24,53 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/course/:id" element={<CourseDetailPage />} />
-            <Route 
-              path="/login" 
+            <Route
+              path="/login"
               element={
                 <ProtectedRoute requireAuth={false}>
                   <LoginPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/signup" 
+            <Route
+              path="/signup"
               element={
                 <ProtectedRoute requireAuth={false}>
                   <SignUpPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/dashboard/student" 
+            <Route
+              path="/dashboard/student"
               element={
                 <ProtectedRoute>
                   <StudentDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/dashboard/instructor" 
+            <Route
+              path="/dashboard/instructor"
               element={
                 <ProtectedRoute>
                   <InstructorDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/course/:id/learn" 
+            <Route
+              path="/course/:id/learn"
               element={
                 <ProtectedRoute>
                   <CoursePlayer />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/instructor/create-course" 
+            <Route
+              path="/instructor/create-course"
               element={
                 <ProtectedRoute>
                   <CreateCoursePage />
                 </ProtectedRoute>
-              } 
+              }
             />
           </Routes>
         </main>

@@ -1,6 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Facebook, Twitter, Linkedin as LinkedIn, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import {
+  BookOpen,
+  Facebook,
+  Twitter,
+  Linkedin as LinkedIn,
+  Instagram,
+  Mail,
+  Phone,
+  MapPin,
+} from 'lucide-react';
 
 export function Footer() {
   return (
@@ -14,7 +22,8 @@ export function Footer() {
               <span className="text-xl font-bold">WesAcademy</span>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Transform your career with expert-led courses. Learn from industry professionals and advance your skills at your own pace.
+              Transform your career with expert-led courses. Learn from industry professionals and
+              advance your skills at your own pace.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
@@ -37,22 +46,34 @@ export function Footer() {
             <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/courses" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/courses"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Browse Courses
                 </Link>
               </li>
               <li>
-                <Link to="/instructors" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/instructors"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Become an Instructor
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/about"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/contact"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Contact
                 </Link>
               </li>
@@ -64,22 +85,34 @@ export function Footer() {
             <h3 className="text-lg font-semibold">Categories</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/courses?category=web-development" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/courses?category=web-development"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Web Development
                 </Link>
               </li>
               <li>
-                <Link to="/courses?category=data-science" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/courses?category=data-science"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Data Science
                 </Link>
               </li>
               <li>
-                <Link to="/courses?category=design" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/courses?category=design"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Design
                 </Link>
               </li>
               <li>
-                <Link to="/courses?category=business" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link
+                  to="/courses?category=business"
+                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                >
                   Business
                 </Link>
               </li>
@@ -108,17 +141,24 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
-              © 2025 WesAcademy. All rights reserved.
-            </p>
+            <p className="text-gray-400 text-sm">© 2025 WesAcademy. All rights reserved.</p>
             <div className="flex space-x-6">
-              <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <Link
+                to="/privacy"
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <Link
+                to="/terms"
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
                 Terms of Service
               </Link>
-              <Link to="/cookies" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <Link
+                to="/cookies"
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
                 Cookie Policy
               </Link>
             </div>

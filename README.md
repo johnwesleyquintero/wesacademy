@@ -22,25 +22,30 @@ WesAcademy is a web application designed for online learning, featuring course m
 ## Setup Instructions
 
 1.  **Clone the repository:**
+
     ```bash
     git clone https://github.com/johnwesleyquintero/wesacademy.git
     cd wesacademy
     ```
 
 2.  **Install dependencies:**
+
     ```bash
     npm install
     ```
 
 3.  **Environment Variables:**
     Create a `.env` file in the root directory and add your Supabase URL and Anon Key:
+
     ```
     VITE_SUPABASE_URL=YOUR_SUPABASE_URL
     VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
     ```
+
     You can find these in your Supabase project settings.
 
 4.  **Run the development server:**
+
     ```bash
     npm run dev
     ```

@@ -25,7 +25,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course }: CourseCardProps) {
-  const discount = course.originalPrice 
+  const discount = course.originalPrice
     ? Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)
     : 0;
 
@@ -37,7 +37,7 @@ export function CourseCard({ course }: CourseCardProps) {
           alt={course.title}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        
+
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {course.isBestseller && (
@@ -58,7 +58,7 @@ export function CourseCard({ course }: CourseCardProps) {
             </div>
           )}
         </div>
-        
+
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-gray-700">
           {course.level}
         </div>
@@ -72,9 +72,7 @@ export function CourseCard({ course }: CourseCardProps) {
         </div>
 
         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
-          <Link to={`/course/${course.id}`}>
-            {course.title}
-          </Link>
+          <Link to={`/course/${course.id}`}>{course.title}</Link>
         </h3>
 
         <p className="text-sm text-gray-600 mb-3">by {course.instructor}</p>
@@ -83,10 +81,7 @@ export function CourseCard({ course }: CourseCardProps) {
         {course.tags && course.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
             {course.tags.slice(0, 3).map((tag, index) => (
-              <span
-                key={index}
-                className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-              >
+              <span key={index} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
                 {tag}
               </span>
             ))}
