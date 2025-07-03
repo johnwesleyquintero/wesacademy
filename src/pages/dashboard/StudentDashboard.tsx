@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { BookOpen, Clock, Award, TrendingUp, Play, Calendar, Star, BarChart3 } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, Clock, Award, TrendingUp, Play, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEnrollments } from '../../hooks/useEnrollments';
 import { useAuth } from '../../contexts/AuthContext.hooks';
 
 export function StudentDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
-  const { enrollments, loading, error } = useEnrollments();
+  const { enrollments, loading } = useEnrollments();
   const { user } = useAuth();
 
   const achievements = [
@@ -21,17 +21,37 @@ export function StudentDashboard() {
     const totalHours = enrollments.reduce((sum, enrollment) => {
       const duration = enrollment.course?.duration || '0h';
       const hours = parseFloat(duration.replace('h', '').replace(' hours', '')) || 0;
-      return sum + (hours * (enrollment.progress / 100));
+      return sum + hours * (enrollment.progress / 100);
     }, 0);
 
-    const completedCourses = enrollments.filter(e => e.progress >= 100).length;
+    const completedCourses = enrollments.filter((e) => e.progress >= 100).length;
     const currentStreak = 7; // This would be calculated based on last_accessed dates
 
     return [
-      { label: 'Courses Enrolled', value: enrollments.length.toString(), icon: BookOpen, color: 'text-blue-600' },
-      { label: 'Hours Learned', value: Math.round(totalHours).toString(), icon: Clock, color: 'text-green-600' },
-      { label: 'Certificates Earned', value: completedCourses.toString(), icon: Award, color: 'text-yellow-600' },
-      { label: 'Current Streak', value: currentStreak.toString(), icon: TrendingUp, color: 'text-purple-600' },
+      {
+        label: 'Courses Enrolled',
+        value: enrollments.length.toString(),
+        icon: BookOpen,
+        color: 'text-blue-600',
+      },
+      {
+        label: 'Hours Learned',
+        value: Math.round(totalHours).toString(),
+        icon: Clock,
+        color: 'text-green-600',
+      },
+      {
+        label: 'Certificates Earned',
+        value: completedCourses.toString(),
+        icon: Award,
+        color: 'text-yellow-600',
+      },
+      {
+        label: 'Current Streak',
+        value: currentStreak.toString(),
+        icon: TrendingUp,
+        color: 'text-purple-600',
+      },
     ];
   }, [enrollments]);
 
@@ -71,7 +91,9 @@ export function StudentDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back, {getUserDisplayName()}!</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Welcome back, {getUserDisplayName()}!
+          </h1>
           <p className="text-gray-600 mt-2">Continue your learning journey</p>
         </div>
 
@@ -122,7 +144,9 @@ export function StudentDashboard() {
                     <div className="text-center py-12 bg-gray-50 rounded-lg">
                       <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                       <h4 className="text-lg font-medium text-gray-900 mb-2">No courses yet</h4>
-                      <p className="text-gray-600 mb-6">Start your learning journey by enrolling in a course.</p>
+                      <p className="text-gray-600 mb-6">
+                        Start your learning journey by enrolling in a course.
+                      </p>
                       <Link
                         to="/courses"
                         className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
@@ -137,7 +161,10 @@ export function StudentDashboard() {
                         <div key={enrollment.id} className="bg-gray-50 rounded-lg p-6">
                           <div className="flex items-start space-x-4">
                             <img
-                              src={enrollment.course?.image_url || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300'}
+                              src={
+                                enrollment.course?.image_url ||
+                                'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300'
+                              }
                               alt={enrollment.course?.title || 'Course'}
                               className="w-20 h-20 rounded-lg object-cover"
                             />
@@ -227,7 +254,9 @@ export function StudentDashboard() {
                   <div className="text-center py-12 bg-gray-50 rounded-lg">
                     <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h4 className="text-lg font-medium text-gray-900 mb-2">No enrolled courses</h4>
-                    <p className="text-gray-600 mb-6">Start learning by enrolling in your first course.</p>
+                    <p className="text-gray-600 mb-6">
+                      Start learning by enrolling in your first course.
+                    </p>
                     <Link
                       to="/courses"
                       className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
@@ -244,7 +273,10 @@ export function StudentDashboard() {
                         className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                       >
                         <img
-                          src={enrollment.course?.image_url || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300'}
+                          src={
+                            enrollment.course?.image_url ||
+                            'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=300'
+                          }
                           alt={enrollment.course?.title || 'Course'}
                           className="w-full h-48 object-cover"
                         />
@@ -331,7 +363,7 @@ export function StudentDashboard() {
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-900">Certificates</h3>
 
-                {enrollments.filter(e => e.progress >= 100).length === 0 ? (
+                {enrollments.filter((e) => e.progress >= 100).length === 0 ? (
                   <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
                     <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h4 className="text-lg font-medium text-gray-900 mb-2">
@@ -352,18 +384,26 @@ export function StudentDashboard() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {enrollments
-                      .filter(e => e.progress >= 100)
+                      .filter((e) => e.progress >= 100)
                       .map((enrollment) => (
-                        <div key={enrollment.id} className="bg-white border border-gray-200 rounded-lg p-6">
+                        <div
+                          key={enrollment.id}
+                          className="bg-white border border-gray-200 rounded-lg p-6"
+                        >
                           <div className="flex items-center mb-4">
                             <Award className="w-8 h-8 text-yellow-500 mr-3" />
                             <div>
-                              <h4 className="font-semibold text-gray-900">Certificate of Completion</h4>
+                              <h4 className="font-semibold text-gray-900">
+                                Certificate of Completion
+                              </h4>
                               <p className="text-sm text-gray-600">{enrollment.course?.title}</p>
                             </div>
                           </div>
                           <p className="text-sm text-gray-500 mb-4">
-                            Completed on {enrollment.completed_at ? new Date(enrollment.completed_at).toLocaleDateString() : 'Recently'}
+                            Completed on{' '}
+                            {enrollment.completed_at
+                              ? new Date(enrollment.completed_at).toLocaleDateString()
+                              : 'Recently'}
                           </p>
                           <button className="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors">
                             Download Certificate

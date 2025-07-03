@@ -3,6 +3,7 @@ import { Search, Filter, Grid, List, TrendingUp, Star } from 'lucide-react';
 import { CourseCard } from '../components/courses/CourseCard';
 import { CourseFilters } from '../components/courses/CourseFilters';
 import { useCourses } from '../hooks/useCourses';
+import type { Course } from '../hooks/useCourses';
 
 export function CoursesPage() {
   const { courses, loading, error, searchCourses } = useCourses();
@@ -10,12 +11,12 @@ export function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
   // Get unique categories from courses
   const categories = React.useMemo(() => {
-    const uniqueCategories = [...new Set(courses.map(course => course.category))];
+    const uniqueCategories = [...new Set(courses.map((course) => course.category))];
     return uniqueCategories;
   }, [courses]);
 
@@ -37,9 +38,10 @@ export function CoursesPage() {
         }
       } else {
         // Filter by category only
-        const filtered = selectedCategory === 'all' 
-          ? courses 
-          : courses.filter(course => course.category === selectedCategory);
+        const filtered =
+          selectedCategory === 'all'
+            ? courses
+            : courses.filter((course) => course.category === selectedCategory);
         setFilteredCourses(filtered);
       }
     };
@@ -48,7 +50,7 @@ export function CoursesPage() {
   }, [searchTerm, selectedCategory, courses, searchCourses]);
 
   const trendingCourses = React.useMemo(() => {
-    return courses.filter(course => course.is_new || course.is_bestseller).slice(0, 3);
+    return courses.filter((course) => course.is_new || course.is_bestseller).slice(0, 3);
   }, [courses]);
 
   if (loading) {
@@ -82,8 +84,8 @@ export function CoursesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-12">
             <p className="text-red-600 text-lg">Error loading courses: {error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="mt-4 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Try Again
@@ -154,7 +156,10 @@ export function CoursesPage() {
                 {trendingCourses.slice(0, 3).map((course) => (
                   <div key={course.id} className="text-center">
                     <img
-                      src={course.image_url || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=100'}
+                      src={
+                        course.image_url ||
+                        'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=100'
+                      }
                       alt={course.title}
                       className="w-16 h-16 rounded-lg object-cover mb-2"
                     />
@@ -227,7 +232,9 @@ export function CoursesPage() {
                   <>
                     Showing {filteredCourses.length} of {courses.length} courses
                     {selectedCategory !== 'all' && (
-                      <span className="ml-2 text-primary-600 font-medium">in {selectedCategory}</span>
+                      <span className="ml-2 text-primary-600 font-medium">
+                        in {selectedCategory}
+                      </span>
                     )}
                   </>
                 )}
@@ -257,7 +264,10 @@ export function CoursesPage() {
             {isSearching ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                  <div
+                    key={i}
+                    className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse"
+                  >
                     <div className="w-full h-48 bg-gray-200"></div>
                     <div className="p-6 space-y-3">
                       <div className="h-4 bg-gray-200 rounded w-3/4"></div>

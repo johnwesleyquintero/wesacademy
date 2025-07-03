@@ -149,7 +149,7 @@ CREATE POLICY "Anyone can view published courses"
   ON courses
   FOR SELECT
   TO public
-  USING (is_published = true);
+  USING (true);
 
 CREATE POLICY "Instructors can manage their own courses"
   ON courses

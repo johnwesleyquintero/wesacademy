@@ -1,5 +1,15 @@
 import { Link } from 'react-router-dom';
-import { Code, Database, Palette, Briefcase, Megaphone, Camera, User, DollarSign, Heart } from 'lucide-react';
+import {
+  Code,
+  Database,
+  Palette,
+  Briefcase,
+  Megaphone,
+  Camera,
+  User,
+  DollarSign,
+  Heart,
+} from 'lucide-react';
 
 const iconMap = {
   code: Code,

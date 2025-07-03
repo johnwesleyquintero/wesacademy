@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useEnrollments } from '../../hooks/useEnrollments';
 import { useAuth } from '../../contexts/AuthContext.hooks';
 import { Link } from 'react-router-dom';
@@ -63,9 +63,7 @@ export function EnrollmentButton({ courseId, coursePrice, className = '' }: Enro
           Continue Learning
         </Link>
         {enrollment && enrollment.progress > 0 && (
-          <div className="text-sm text-gray-600">
-            Progress: {enrollment.progress}% complete
-          </div>
+          <div className="text-sm text-gray-600">Progress: {enrollment.progress}% complete</div>
         )}
       </div>
     );
@@ -87,9 +85,7 @@ export function EnrollmentButton({ courseId, coursePrice, className = '' }: Enro
           </>
         )}
       </button>
-      {error && (
-        <p className="text-red-600 text-sm">{error}</p>
-      )}
+      {error && <p className="text-red-600 text-sm">{error}</p>}
     </div>
   );
 }

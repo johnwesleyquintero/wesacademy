@@ -1,6 +1,20 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
+export interface CourseReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  profile_id: string;
+  course_id: string;
+  profiles?: {
+    full_name: string;
+    avatar_url: string | null;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -24,22 +38,14 @@ export interface Course {
   review_count?: number; // Added for review count
   created_at: string;
   updated_at: string;
+  course_reviews?: CourseReview[];
   // Properties for CourseDetailPage mock data structure
   reviews?: number;
   students?: number;
   image?: string;
   originalPrice?: number;
   whatYouWillLearn?: string[];
-  curriculum?: Array<{
-    section: string;
-    lectures: number;
-    duration: string;
-    lessons: Array<{
-      title: string;
-      duration: string;
-      preview: boolean;
-    }>;
-  }>;
+  curriculum?: CourseSection[];
   requirements?: string[];
   features?: string[];
   lectures?: number;
@@ -51,6 +57,22 @@ export interface Course {
     rating: number;
     image: string;
   };
+  tags?: string[]; // Added tags property
+}
+
+export interface CourseSection {
+  id: string;
+  title: string;
+  lectures: number;
+  duration: string;
+  lessons: CourseLesson[];
+}
+
+export interface CourseLesson {
+  id: string;
+  title: string;
+  duration: string;
+  preview: boolean;
 }
 
 export function useCourses() {
@@ -90,7 +112,7 @@ export function useCourses() {
           rating:
             course.course_reviews?.length > 0
               ? course.course_reviews.reduce(
-                  (sum: number, review: { rating: number }) => sum + review.rating,
+                  (sum: number, review: CourseReview) => sum + review.rating,
                   0
                 ) / course.course_reviews.length
               : 0,
@@ -99,6 +121,7 @@ export function useCourses() {
 
       setCourses(processedCourses);
     } catch (err: unknown) {
+      console.error('Error fetching courses:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -136,7 +159,7 @@ export function useCourses() {
         rating:
           data.course_reviews?.length > 0
             ? data.course_reviews.reduce(
-                (sum: number, review: { rating: number }) => sum + review.rating,
+                (sum: number, review: CourseReview) => sum + review.rating,
                 0
               ) / data.course_reviews.length
             : 0,
@@ -144,6 +167,7 @@ export function useCourses() {
         review_count: data.course_reviews?.length || 0,
       };
     } catch (err: unknown) {
+      console.error('Error fetching course by ID:', err);
       throw new Error(err instanceof Error ? err.message : 'Failed to fetch course');
     }
   };
@@ -216,7 +240,8 @@ export function useCourses() {
 
       return processedCourses;
     } catch (err: unknown) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to search courses');
+      console.error('Error searching courses:', err);
+      throw new Error(err instanceof Error ? err.message : 'Failed to fetch course');
     }
   };
 

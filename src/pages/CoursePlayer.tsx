@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import {
   Play,
   Pause,
@@ -14,7 +13,6 @@ import {
 } from 'lucide-react';
 
 export function CoursePlayer() {
-  const { id } = useParams();
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [completedLessons, setCompletedLessons] = useState(new Set(['1', '2']));

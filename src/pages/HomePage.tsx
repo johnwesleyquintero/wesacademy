@@ -1,39 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Play,
-  Users,
-  Award,
-  BookOpen,
-  Star,
-  TrendingUp,
-  Zap,
-  Target,
-  Clock,
-} from 'lucide-react';
+import { ArrowRight, Play, Users, Star, TrendingUp, Zap, Target, Clock } from 'lucide-react';
 import { CourseCard } from '../components/courses/CourseCard';
 import { CategoryCard } from '../components/home/CategoryCard';
 import { StatsSection } from '../components/home/StatsSection';
 import { useCourses } from '../hooks/useCourses';
+import type { Course } from '../hooks/useCourses';
 import { categories, learningPaths } from '../data/courseData';
 
 export function HomePage() {
   const { courses, loading, error } = useCourses();
-  const [featuredCourses, setFeaturedCourses] = useState([]);
-  const [trendingCourses, setTrendingCourses] = useState([]);
+  const [featuredCourses, setFeaturedCourses] = useState<Course[]>([]);
+  const [trendingCourses, setTrendingCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     if (courses.length > 0) {
       // Get featured courses (bestsellers and high-rated)
       const featured = courses
-        .filter(course => course.is_bestseller || (course.rating && course.rating >= 4.5))
+        .filter((course) => course.is_bestseller || (course.rating && course.rating >= 4.5))
         .slice(0, 8);
       setFeaturedCourses(featured);
 
       // Get trending courses (new courses and bestsellers)
       const trending = courses
-        .filter(course => course.is_new || course.is_bestseller)
+        .filter((course) => course.is_new || course.is_bestseller)
         .slice(0, 4);
       setTrendingCourses(trending);
     }
@@ -153,7 +143,10 @@ export function HomePage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse"
+                >
                   <div className="w-full h-48 bg-gray-200"></div>
                   <div className="p-6 space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -169,21 +162,27 @@ export function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {trendingCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
+              {trendingCourses.length > 0 ? (
+                trendingCourses.map((course) => <CourseCard key={course.id} course={course} />)
+              ) : (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No trending courses found.
+                </div>
+              )}
             </div>
           )}
 
-          <div className="text-center mt-12">
-            <Link
-              to="/courses"
-              className="inline-flex items-center px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              View All Trending Courses
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
+          {trendingCourses.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                to="/courses"
+                className="inline-flex items-center px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                View All Trending Courses
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
@@ -278,7 +277,10 @@ export function HomePage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse"
+                >
                   <div className="w-full h-48 bg-gray-200"></div>
                   <div className="p-6 space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -294,21 +296,27 @@ export function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
+              {featuredCourses.length > 0 ? (
+                featuredCourses.map((course) => <CourseCard key={course.id} course={course} />)
+              ) : (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No featured courses found.
+                </div>
+              )}
             </div>
           )}
 
-          <div className="text-center mt-12">
-            <Link
-              to="/courses"
-              className="inline-flex items-center px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              View All Courses
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
+          {featuredCourses.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                to="/courses"
+                className="inline-flex items-center px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                View All Courses
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

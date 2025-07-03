@@ -10,7 +10,7 @@ import {
   MessageCircle,
   BookOpen,
 } from 'lucide-react';
-import type { Course } from '../hooks/useCourses';
+import type { Course, CourseSection, CourseLesson, CourseReview } from '../hooks/useCourses';
 import { useCourses } from '../hooks/useCourses';
 import { EnrollmentButton } from '../components/courses/EnrollmentButton';
 
@@ -78,7 +78,7 @@ export function CourseDetailPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg text-red-600 mb-4">Error: {error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
@@ -111,14 +111,14 @@ export function CourseDetailPage() {
     'Learn industry best practices and standards',
     'Get hands-on experience with practical exercises',
     'Understand how to apply concepts in professional settings',
-    'Develop problem-solving and critical thinking skills'
+    'Develop problem-solving and critical thinking skills',
   ];
 
   const requirements = [
     'Basic computer literacy and internet access',
     'No prior experience required - we start from the basics',
     'Willingness to learn and practice regularly',
-    'Access to a computer or laptop for hands-on exercises'
+    'Access to a computer or laptop for hands-on exercises',
   ];
 
   const features = [
@@ -127,7 +127,7 @@ export function CourseDetailPage() {
     'Certificate of completion',
     'Direct instructor support',
     'Downloadable resources',
-    '30-day money-back guarantee'
+    '30-day money-back guarantee',
   ];
 
   return (
@@ -146,9 +146,7 @@ export function CourseDetailPage() {
                   </div>
                 )}
                 <h1 className="text-3xl sm:text-4xl font-bold leading-tight">{course.title}</h1>
-                {course.subtitle && (
-                  <p className="text-xl text-gray-300">{course.subtitle}</p>
-                )}
+                {course.subtitle && <p className="text-xl text-gray-300">{course.subtitle}</p>}
               </div>
 
               <div className="flex flex-wrap items-center gap-6 text-sm">
@@ -180,7 +178,10 @@ export function CourseDetailPage() {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center">
                   <img
-                    src={course.instructor_avatar || 'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=150'}
+                    src={
+                      course.instructor_avatar ||
+                      'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=150'
+                    }
                     alt={course.instructor_name || 'Unknown Instructor'}
                     className="w-10 h-10 rounded-full mr-3"
                   />
@@ -199,7 +200,10 @@ export function CourseDetailPage() {
               <div className="bg-white rounded-xl shadow-xl p-6 sticky top-24">
                 <div className="relative mb-6">
                   <img
-                    src={course.image_url || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                    src={
+                      course.image_url ||
+                      'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=800'
+                    }
                     alt={course.title}
                     className="w-full rounded-lg"
                   />
@@ -227,8 +231,8 @@ export function CourseDetailPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <EnrollmentButton 
-                      courseId={course.id} 
+                    <EnrollmentButton
+                      courseId={course.id}
                       coursePrice={course.price}
                       className="w-full"
                     />
@@ -326,13 +330,14 @@ export function CourseDetailPage() {
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-semibold text-gray-900">Course content</h3>
                       <p className="text-sm text-gray-500">
-                        {course.sections?.length || 0} sections • {course.duration || '0h 0m'} total length
+                        {course.curriculum?.length || 0} sections • {course.duration || '0h 0m'}{' '}
+                        total length
                       </p>
                     </div>
 
                     <div className="space-y-4">
-                      {course.sections && course.sections.length > 0 ? (
-                        course.sections.map((section, index) => (
+                      {course.curriculum && course.curriculum.length > 0 ? (
+                        course.curriculum.map((section: CourseSection) => (
                           <div key={section.id} className="border border-gray-200 rounded-lg">
                             <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                               <div className="flex items-center justify-between">
@@ -343,7 +348,7 @@ export function CourseDetailPage() {
                               </div>
                             </div>
                             <div className="divide-y divide-gray-200">
-                              {section.lessons?.map((lesson, lessonIndex) => (
+                              {section.lessons?.map((lesson: CourseLesson) => (
                                 <div
                                   key={lesson.id}
                                   className="px-4 py-3 flex items-center justify-between"
@@ -351,13 +356,15 @@ export function CourseDetailPage() {
                                   <div className="flex items-center">
                                     <Play className="w-4 h-4 text-gray-400 mr-3" />
                                     <span className="text-sm text-gray-700">{lesson.title}</span>
-                                    {lesson.is_preview && (
+                                    {lesson.preview && (
                                       <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                                         Preview
                                       </span>
                                     )}
                                   </div>
-                                  <span className="text-sm text-gray-500">{lesson.duration || '0:00'}</span>
+                                  <span className="text-sm text-gray-500">
+                                    {lesson.duration || '0:00'}
+                                  </span>
                                 </div>
                               )) || (
                                 <div className="px-4 py-3 text-sm text-gray-500">
@@ -378,7 +385,10 @@ export function CourseDetailPage() {
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
                       <img
-                        src={course.instructor_avatar || 'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=150'}
+                        src={
+                          course.instructor_avatar ||
+                          'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=150'
+                        }
                         alt={course.instructor_name || 'Unknown Instructor'}
                         className="w-24 h-24 rounded-full"
                       />
@@ -422,13 +432,13 @@ export function CourseDetailPage() {
                         </div>
                         <div className="flex items-center justify-center mb-2">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <Star 
-                              key={star} 
+                            <Star
+                              key={star}
                               className={`w-5 h-5 ${
-                                course.rating && star <= course.rating 
-                                  ? 'text-yellow-400 fill-current' 
+                                course.rating && star <= course.rating
+                                  ? 'text-yellow-400 fill-current'
                                   : 'text-gray-300'
-                              }`} 
+                              }`}
                             />
                           ))}
                         </div>
@@ -466,11 +476,14 @@ export function CourseDetailPage() {
 
                     <div className="space-y-6">
                       {course.course_reviews && course.course_reviews.length > 0 ? (
-                        course.course_reviews.map((review, index) => (
+                        course.course_reviews.map((review: CourseReview, index: number) => (
                           <div key={index} className="border-b border-gray-200 pb-6">
                             <div className="flex items-start space-x-4">
                               <img
-                                src={review.profiles?.avatar_url || 'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=100'}
+                                src={
+                                  review.profiles?.avatar_url ||
+                                  'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=100'
+                                }
                                 alt={review.profiles?.full_name || 'Student'}
                                 className="w-10 h-10 rounded-full"
                               />
@@ -481,13 +494,13 @@ export function CourseDetailPage() {
                                   </h4>
                                   <div className="flex items-center">
                                     {[1, 2, 3, 4, 5].map((star) => (
-                                      <Star 
-                                        key={star} 
+                                      <Star
+                                        key={star}
                                         className={`w-4 h-4 ${
-                                          star <= review.rating 
-                                            ? 'text-yellow-400 fill-current' 
+                                          star <= review.rating
+                                            ? 'text-yellow-400 fill-current'
                                             : 'text-gray-300'
-                                        }`} 
+                                        }`}
                                       />
                                     ))}
                                   </div>

@@ -1,28 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Clock, Users, BookOpen, Award, Zap } from 'lucide-react';
+import { Star, Clock, Users, Award, Zap } from 'lucide-react';
 
-interface Course {
-  id: string;
-  title: string;
-  instructor_name?: string;
-  instructor?: string;
-  price: number;
-  original_price?: number;
-  rating?: number;
-  student_count?: number;
-  students?: number;
-  image_url?: string;
-  image?: string;
-  duration?: string;
-  level: string;
-  category: string;
-  description?: string;
-  subtitle?: string;
-  tags?: string[];
-  is_bestseller?: boolean;
-  is_new?: boolean;
-}
+import type { Course } from '../../hooks/useCourses';
 
 interface CourseCardProps {
   course: Course;
@@ -33,9 +12,12 @@ export function CourseCard({ course }: CourseCardProps) {
     ? Math.round(((course.original_price - course.price) / course.original_price) * 100)
     : 0;
 
-  const instructorName = course.instructor_name || course.instructor || 'Unknown Instructor';
+  const instructorName = course.instructor_name || 'Unknown Instructor';
   const studentCount = course.student_count || course.students || 0;
-  const imageUrl = course.image_url || course.image || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=500';
+  const imageUrl =
+    course.image_url ||
+    course.image ||
+    'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=500';
 
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
@@ -95,7 +77,7 @@ export function CourseCard({ course }: CourseCardProps) {
         {/* Tags */}
         {course.tags && course.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
-            {course.tags.slice(0, 3).map((tag, index) => (
+            {course.tags.slice(0, 3).map((tag: string, index: number) => (
               <span key={index} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
                 {tag}
               </span>
