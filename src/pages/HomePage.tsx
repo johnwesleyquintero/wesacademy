@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -15,9 +15,30 @@ import {
 import { CourseCard } from '../components/courses/CourseCard';
 import { CategoryCard } from '../components/home/CategoryCard';
 import { StatsSection } from '../components/home/StatsSection';
-import { featuredCourses, categories, trendingCourses, learningPaths } from '../data/courseData';
+import { useCourses } from '../hooks/useCourses';
+import { categories, learningPaths } from '../data/courseData';
 
 export function HomePage() {
+  const { courses, loading, error } = useCourses();
+  const [featuredCourses, setFeaturedCourses] = useState([]);
+  const [trendingCourses, setTrendingCourses] = useState([]);
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      // Get featured courses (bestsellers and high-rated)
+      const featured = courses
+        .filter(course => course.is_bestseller || (course.rating && course.rating >= 4.5))
+        .slice(0, 8);
+      setFeaturedCourses(featured);
+
+      // Get trending courses (new courses and bestsellers)
+      const trending = courses
+        .filter(course => course.is_new || course.is_bestseller)
+        .slice(0, 4);
+      setTrendingCourses(trending);
+    }
+  }, [courses]);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -62,7 +83,7 @@ export function HomePage() {
                   <div className="text-sm text-gray-500">Active Students</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">1,780+</div>
+                  <div className="text-2xl font-bold text-gray-900">{courses.length}+</div>
                   <div className="text-sm text-gray-500">Expert Courses</div>
                 </div>
                 <div className="text-center">
@@ -129,11 +150,30 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {trendingCourses.slice(0, 4).map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                  <div className="w-full h-48 bg-gray-200"></div>
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600">Error loading courses: {error}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {trendingCourses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link
@@ -162,26 +202,7 @@ export function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category) => (
-              <div
-                key={category.name}
-                className="group bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 text-center"
-              >
-                <div
-                  className={`w-16 h-16 ${category.color} rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  {category.icon === 'code' && <BookOpen className="w-8 h-8 text-white" />}
-                  {category.icon === 'briefcase' && <Award className="w-8 h-8 text-white" />}
-                  {category.icon === 'palette' && <Star className="w-8 h-8 text-white" />}
-                  {category.icon === 'user' && <Users className="w-8 h-8 text-white" />}
-                  {category.icon === 'dollar-sign' && <TrendingUp className="w-8 h-8 text-white" />}
-                  {category.icon === 'heart' && <Target className="w-8 h-8 text-white" />}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">{category.description}</p>
-                <p className="text-sm font-medium text-primary-600">{category.courses} courses</p>
-              </div>
+              <CategoryCard key={category.name} category={category} />
             ))}
           </div>
         </div>
@@ -254,11 +275,30 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredCourses.slice(0, 8).map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                  <div className="w-full h-48 bg-gray-200"></div>
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600">Error loading courses: {error}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {featuredCourses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link

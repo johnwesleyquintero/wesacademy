@@ -1,25 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Grid, List, TrendingUp, Star } from 'lucide-react';
 import { CourseCard } from '../components/courses/CourseCard';
 import { CourseFilters } from '../components/courses/CourseFilters';
-import { featuredCourses, categories, trendingCourses } from '../data/courseData';
+import { useCourses } from '../hooks/useCourses';
 
 export function CoursesPage() {
+  const { courses, loading, error, searchCourses } = useCourses();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const filteredCourses = featuredCourses.filter((course) => {
-    const matchesSearch =
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.tags?.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Get unique categories from courses
+  const categories = React.useMemo(() => {
+    const uniqueCategories = [...new Set(courses.map(course => course.category))];
+    return uniqueCategories;
+  }, [courses]);
 
-    const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;
+  // Filter courses based on search and category
+  useEffect(() => {
+    const filterCourses = async () => {
+      if (searchTerm.trim()) {
+        setIsSearching(true);
+        try {
+          const searchResults = await searchCourses(searchTerm, {
+            category: selectedCategory !== 'all' ? selectedCategory : undefined,
+          });
+          setFilteredCourses(searchResults);
+        } catch (err) {
+          console.error('Search error:', err);
+          setFilteredCourses([]);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        // Filter by category only
+        const filtered = selectedCategory === 'all' 
+          ? courses 
+          : courses.filter(course => course.category === selectedCategory);
+        setFilteredCourses(filtered);
+      }
+    };
 
-    return matchesSearch && matchesCategory;
-  });
+    filterCourses();
+  }, [searchTerm, selectedCategory, courses, searchCourses]);
+
+  const trendingCourses = React.useMemo(() => {
+    return courses.filter(course => course.is_new || course.is_bestseller).slice(0, 3);
+  }, [courses]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <div className="h-8 bg-gray-200 rounded w-64 mb-2 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-96 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                <div className="w-full h-48 bg-gray-200"></div>
+                <div className="p-6 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            <p className="text-red-600 text-lg">Error loading courses: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -46,52 +119,25 @@ export function CoursesPage() {
             >
               All Courses
             </button>
-            <button
-              onClick={() => setSelectedCategory('Technology & Data')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                selectedCategory === 'Technology & Data'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4 inline mr-2" />
-              Technology & Data
-            </button>
-            <button
-              onClick={() => setSelectedCategory('Business & Marketing')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                selectedCategory === 'Business & Marketing'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              Business & Marketing
-            </button>
-            <button
-              onClick={() => setSelectedCategory('Creative & Design')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                selectedCategory === 'Creative & Design'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              Creative & Design
-            </button>
-            <button
-              onClick={() => setSelectedCategory('Personal Development')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                selectedCategory === 'Personal Development'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              Personal Development
-            </button>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                }`}
+              >
+                {category === 'Technology & Data' && <TrendingUp className="w-4 h-4 inline mr-2" />}
+                {category}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Trending Banner */}
-        {selectedCategory === 'all' && (
+        {selectedCategory === 'all' && trendingCourses.length > 0 && (
           <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
@@ -108,7 +154,7 @@ export function CoursesPage() {
                 {trendingCourses.slice(0, 3).map((course) => (
                   <div key={course.id} className="text-center">
                     <img
-                      src={course.image}
+                      src={course.image_url || 'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=100'}
                       alt={course.title}
                       className="w-16 h-16 rounded-lg object-cover mb-2"
                     />
@@ -175,9 +221,15 @@ export function CoursesPage() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <p className="text-gray-600">
-                Showing {filteredCourses.length} of {featuredCourses.length} courses
-                {selectedCategory !== 'all' && (
-                  <span className="ml-2 text-primary-600 font-medium">in {selectedCategory}</span>
+                {isSearching ? (
+                  'Searching...'
+                ) : (
+                  <>
+                    Showing {filteredCourses.length} of {courses.length} courses
+                    {selectedCategory !== 'all' && (
+                      <span className="ml-2 text-primary-600 font-medium">in {selectedCategory}</span>
+                    )}
+                  </>
                 )}
               </p>
               <select className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
@@ -191,7 +243,7 @@ export function CoursesPage() {
             </div>
 
             {/* Bestseller Badge Info */}
-            {filteredCourses.some((course) => course.isBestseller) && (
+            {filteredCourses.some((course) => course.is_bestseller) && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
                 <div className="flex items-center">
                   <Star className="w-5 h-5 text-yellow-600 mr-2" />
@@ -202,17 +254,32 @@ export function CoursesPage() {
               </div>
             )}
 
-            <div
-              className={`grid gap-6 ${
-                viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-              }`}
-            >
-              {filteredCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
+            {isSearching ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                    <div className="w-full h-48 bg-gray-200"></div>
+                    <div className="p-6 space-y-3">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div
+                className={`grid gap-6 ${
+                  viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+                }`}
+              >
+                {filteredCourses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            )}
 
-            {filteredCourses.length === 0 && (
+            {!isSearching && filteredCourses.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
                   <Search className="w-16 h-16 mx-auto" />
@@ -234,7 +301,7 @@ export function CoursesPage() {
             )}
 
             {/* Load More */}
-            {filteredCourses.length > 0 && filteredCourses.length >= 12 && (
+            {!isSearching && filteredCourses.length > 0 && filteredCourses.length >= 12 && (
               <div className="text-center mt-12">
                 <button className="bg-primary-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors">
                   Load More Courses
